@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import os
 import json
 import time
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Dict, List
 import boto3
 import logging
 
@@ -28,7 +30,7 @@ class MetricsLogger:
         name: str,
         value: float,
         unit: str = "None",
-        dimensions: Optional[dict[str, str]] = None,
+        dimensions: Optional[Dict[str, str]] = None,
     ):
         """Log a single metric."""
         metric = {
@@ -129,7 +131,7 @@ class CloudWatchMonitor:
         self,
         hours: int = 24,
         period: int = 300,  # 5 minutes
-    ) -> dict:
+    ) -> Dict:
         """Get SageMaker endpoint metrics."""
         end_time = datetime.utcnow()
         start_time = end_time - timedelta(hours=hours)
@@ -176,7 +178,7 @@ class CloudWatchMonitor:
         metric_name: str,
         hours: int = 24,
         period: int = 300,
-    ) -> list[dict]:
+    ) -> List[Dict]:
         """Get custom application metrics."""
         end_time = datetime.utcnow()
         start_time = end_time - timedelta(hours=hours)
@@ -306,7 +308,7 @@ class CloudWatchMonitor:
         self.cloudwatch.put_metric_alarm(**alarm_config)
         logger.info(f"Alarm created: {alarm_name}")
     
-    def get_endpoint_status(self) -> dict:
+    def get_endpoint_status(self) -> Dict:
         """Get current endpoint status."""
         response = self.sagemaker.describe_endpoint(
             EndpointName=self.endpoint_name

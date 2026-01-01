@@ -186,7 +186,11 @@ class Trainer:
                 all_labels.extend(batch["labels"].cpu().numpy())
         
         accuracy = accuracy_score(all_labels, all_preds)
-        f1 = f1_score(all_labels, all_preds, average="weighted")
+        f1 = f1_score(all_labels, all_preds, average="weighted", zero_division=0)
+        
+        # Get unique labels present in data
+        unique_labels = sorted(set(all_labels) | set(all_preds))
+        present_names = [self.config.label_names[i] for i in unique_labels if i < len(self.config.label_names)]
         
         return {
             "loss": total_loss / len(self.eval_loader),
@@ -195,7 +199,9 @@ class Trainer:
             "report": classification_report(
                 all_labels,
                 all_preds,
-                target_names=self.config.label_names,
+                labels=unique_labels,
+                target_names=present_names,
+                zero_division=0,
             ),
         }
 

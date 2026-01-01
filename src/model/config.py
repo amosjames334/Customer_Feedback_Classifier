@@ -8,7 +8,7 @@ class ModelConfig:
     
     # Model settings
     model_name: str = "distilbert-base-uncased"
-    num_labels: int = 3  # positive, negative, neutral
+    num_labels: int = 2  # positive, negative (for IMDB)
     max_length: int = 256
     
     # Training settings
@@ -23,7 +23,7 @@ class ModelConfig:
     data_dir: str = "data"
     
     # Labels
-    label_names: tuple = ("negative", "neutral", "positive")
+    label_names: tuple = ("negative", "positive")
     
     # Device
     device: Optional[str] = None

@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import os
-from typing import TypedDict, Annotated, Literal
+from typing import TypedDict, Literal, Optional, Dict
 from langgraph.graph import StateGraph, END
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -15,9 +17,9 @@ class AgentState(TypedDict):
     """State for the feedback classification agent."""
     query: str
     query_type: str  # "simple" or "complex"
-    classification_result: dict | None
-    llm_analysis: str | None
-    final_response: dict | None
+    classification_result: Optional[Dict]
+    llm_analysis: Optional[str]
+    final_response: Optional[Dict]
 
 
 class FeedbackAgent:
@@ -26,7 +28,7 @@ class FeedbackAgent:
     def __init__(
         self,
         classifier_url: str = "http://localhost:8000",
-        openai_api_key: str | None = None,
+        openai_api_key: Optional[str] = None,
     ):
         self.classifier_url = classifier_url
         self.api_key = openai_api_key or os.getenv("OPENAI_API_KEY")

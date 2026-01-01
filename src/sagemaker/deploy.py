@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import json
 import tarfile
@@ -5,6 +7,7 @@ import boto3
 import sagemaker
 from sagemaker.huggingface import HuggingFaceModel
 from datetime import datetime
+from typing import Optional, List, Dict
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -16,9 +19,9 @@ class SageMakerDeployer:
     
     def __init__(
         self,
-        role_arn: str | None = None,
+        role_arn: Optional[str] = None,
         region: str = "us-east-1",
-        bucket_name: str | None = None,
+        bucket_name: Optional[str] = None,
     ):
         self.region = region
         self.role_arn = role_arn or os.getenv("SAGEMAKER_ROLE_ARN")
@@ -147,7 +150,7 @@ class SageMakerDeployer:
             logger.error(f"Failed to delete endpoint: {e}")
             raise
     
-    def list_endpoints(self) -> list[dict]:
+    def list_endpoints(self) -> List[Dict]:
         """List all SageMaker endpoints."""
         sm_client = self.session.client("sagemaker")
         response = sm_client.list_endpoints()

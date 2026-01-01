@@ -168,9 +168,6 @@ Customer_Feedback_Classifier/
 - Run training first: `python scripts/train.py`
 - Or set `MODEL_PATH` to a pretrained model
 
-**CUDA out of memory:**
-- Reduce batch size: `--batch-size 8`
-- Use CPU: set `CUDA_VISIBLE_DEVICES=""`
 
 **SageMaker deployment fails:**
 - Verify IAM role has correct permissions

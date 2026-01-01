@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 import os
 import torch
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, Dict, List
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from contextlib import asynccontextmanager
 import logging
@@ -22,15 +24,15 @@ class PredictionResponse(BaseModel):
     text: str
     label: str
     confidence: float
-    probabilities: dict[str, float]
+    probabilities: Dict[str, float]
 
 
 class BatchPredictionRequest(BaseModel):
-    texts: list[str] = Field(..., min_items=1, max_items=100)
+    texts: List[str] = Field(..., min_items=1, max_items=100)
 
 
 class BatchPredictionResponse(BaseModel):
-    predictions: list[PredictionResponse]
+    predictions: List[PredictionResponse]
 
 
 class HealthResponse(BaseModel):

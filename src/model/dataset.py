@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import torch
 from torch.utils.data import Dataset
 from transformers import AutoTokenizer
-from typing import Optional
+from typing import Optional, List
 import pandas as pd
 
 from .config import ModelConfig
@@ -12,8 +14,8 @@ class FeedbackDataset(Dataset):
     
     def __init__(
         self,
-        texts: list[str],
-        labels: Optional[list[int]] = None,
+        texts: List[str],
+        labels: Optional[List[int]] = None,
         config: Optional[ModelConfig] = None,
     ):
         self.texts = texts
@@ -77,11 +79,9 @@ class FeedbackDataset(Dataset):
         
         texts = dataset["text"]
         
-        # Map labels for sentiment (IMDB: 0=neg, 1=pos -> we add neutral)
+        # Map labels for sentiment (IMDB: 0=neg, 1=pos)
         if "label" in dataset.features:
-            raw_labels = dataset["label"]
-            # For IMDB: 0->0 (negative), 1->2 (positive)
-            labels = [0 if l == 0 else 2 for l in raw_labels]
+            labels = list(dataset["label"])
         else:
             labels = None
         

@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import json
 import boto3
-from typing import Optional
+from typing import Optional, List, Dict
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -35,7 +37,7 @@ class SageMakerPredictor:
         result = json.loads(response["Body"].read().decode())
         return self._parse_result(result, text)
     
-    def predict_batch(self, texts: list[str]) -> list[dict]:
+    def predict_batch(self, texts: List[str]) -> List[Dict]:
         """Make predictions for multiple texts."""
         payload = {"inputs": texts}
         
@@ -51,7 +53,7 @@ class SageMakerPredictor:
             for result, text in zip(results, texts)
         ]
     
-    def _parse_result(self, result: list[dict], text: str) -> dict:
+    def _parse_result(self, result: List[Dict], text: str) -> Dict:
         """Parse HuggingFace inference result."""
         if isinstance(result, list) and len(result) > 0:
             # Result is list of label/score pairs
